@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>监狱逃脱 Demo</title>
+  <style>
+    body { font-family: sans-serif; background: #f9f9f9; margin: 0; padding: 20px; }
+    h1 { text-align: center; }
+    .room { border: 1px solid #ccc; border-radius: 10px; padding: 20px; margin: 10px auto; max-width: 600px; background: #fff; }
+    .examples { background: #eef; padding: 10px; border-radius: 6px; margin: 10px 0; }
+    .door { background: #fee; padding: 10px; border-radius: 6px; margin: 10px 0; }
+    .hidden { display: none; }
+    button { padding: 6px 12px; margin-top: 10px; }
+    .reward { font-weight: bold; color: green; }
+  </style>
+</head>
+<body>
+  <h1>🔐 监狱逃脱 Demo</h1>
+  <div id="room-container">加载中…</div>
+
+  <script>
+    let rooms = [];
+    let currentRoomIndex = 0;
+
+    async function loadRooms() {
+      const res = await fetch("rooms.json");
+      rooms = await res.json();
+      showRoom(0);
+    }
+
+    function showRoom(idx) {
+      currentRoomIndex = idx;
+      const r = rooms[idx];
+      const container = document.getElementById("room-container");
+      container.innerHTML = `
+        <div class="room">
+          <h2>房间 ${r.id}</h2>
+          <p><b>规则：</b>${r.rule}</p>
+          <div class="examples">
+            <b>墙上的例题：</b>
+            <ul>${r.examples.map(e=>`<li>${e}</li>`).join("")}</ul>
+          </div>
+          <div class="door">
+            <b>门锁题目：</b> ${r.doorQuestion}<br/>
+            <input id="answer" type="text" placeholder="输入答案"/>
+            <button onclick="checkAnswer()">提交</button>
+            <p id="result" class="hidden"></p>
+          </div>
+          <div>
+            ${idx > 0 ? `<button onclick="showRoom(${idx-1})">⬅ 上一个房间</button>` : ""}
+            ${idx < rooms.length-1 ? `<button onclick="showRoom(${idx+1})">下一个房间 ➡</button>` : ""}
+          </div>
+        </div>
+      `;
+    }
+
+    function checkAnswer() {
+      const r = rooms[currentRoomIndex];
+      const input = document.getElementById("answer").value.trim();
+      const result = document.getElementById("result");
+      if (input === r.doorAnswer) {
+        result.textContent = `✅ 正确！通关密码是：${r.rewardCode}`;
+        result.className = "reward";
+      } else {
+        result.textContent = "❌ 错误，请重试。";
+        result.className = "reward";
+      }
+      result.classList.remove("hidden");
+    }
+
+    loadRooms();
+  </script>
+</body>
+</html>
