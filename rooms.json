@@ -1,0 +1,113 @@
+[
+  {
+    "id": 1,
+    "rule": "乘法（结果保留最少有效数字）",
+    "examples": [
+      "40 × 20 = 800",
+      "25 × 10 = 250 ≈ 300"
+    ],
+    "doorQuestion": "12 × 3.5",
+    "doorAnswer": "42.0",
+    "rewardCode": "13",
+    "bg": "room1.png",
+    "hotspots": [
+      {
+        "label": "墙上的题目",
+        "x": 20,
+        "y": 30,
+        "w": 20,
+        "h": 20,
+        "action": "showExamples"
+      },
+      {
+        "label": "门",
+        "x": 70,
+        "y": 30,
+        "w": 20,
+        "h": 40,
+        "action": "door"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "rule": "除法（结果保留最少有效数字）",
+    "examples": [
+      "100 ÷ 3 = 33.3 ≈ 33",
+      "25 ÷ 4.0 = 6.25 ≈ 6.3"
+    ],
+    "doorQuestion": "45 ÷ 2.0",
+    "doorAnswer": "22.0",
+    "rewardCode": "27",
+    "bg": "room2.png",
+    "hotspots": [
+      {
+        "label": "墙上的题目",
+        "x": 20,
+        "y": 30,
+        "w": 20,
+        "h": 20,
+        "action": "showExamples"
+      },
+      {
+        "label": "门",
+        "x": 70,
+        "y": 30,
+        "w": 20,
+        "h": 40,
+        "action": "door"
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "rule": "加法（结果保留到最少小数位数）",
+    "examples": [
+      "12.3 + 4.56 = 16.86 ≈ 16.9",
+      "100 + 3.45 = 103.45 ≈ 103"
+    ],
+    "doorQuestion": "25.0 + 13.24",
+    "doorAnswer": "38.2",
+    "rewardCode": "42",
+    "bg": "room3.png",
+    "hotspots": [
+      {
+        "label": "墙上的题目",
+        "x": 20,
+        "y": 30,
+        "w": 20,
+        "h": 20,
+        "action": "showExamples"
+      },
+      {
+        "label": "门",
+        "x": 70,
+        "y": 30,
+        "w": 20,
+        "h": 40,
+        "action": "door"
+      }
+    ]
+  },
+  {
+    "id": 99,
+    "rule": "最终逃脱大门",
+    "examples": [
+      "输入 1号、5号、7号房的通关密码才能逃脱"
+    ],
+    "doorQuestion": "请输入密码序列（用逗号分隔，例如 13,27,42）",
+    "doorAnswer": "13,27,42",
+    "rewardCode": "ESCAPE",
+    "bg": "exit.png",
+    "hotspots": [
+      {
+        "label": "大门",
+        "x": 40,
+        "y": 30,
+        "w": 30,
+        "h": 40,
+        "action": "door"
+      }
+    ]
+  }
+]

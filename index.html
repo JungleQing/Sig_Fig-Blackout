@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>监狱逃脱 Demo v2</title>
+  <style>
+    body { font-family: sans-serif; background: #f0f0f0; margin: 0; padding: 20px; }
+    h1 { text-align: center; }
+    #game { max-width: 800px; margin: auto; background: #fff; padding: 10px; border-radius: 10px; }
+    .scene { position: relative; width: 100%; padding-top: 56%; background: #ddd; }
+    .scene img { position: absolute; top:0; left:0; width:100%; height:100%; object-fit: cover; }
+    .hotspot { position:absolute; border:2px solid rgba(255,0,0,0.5); cursor:pointer; }
+    #info { margin-top: 10px; padding: 10px; background: #eef; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <h1>🔐 监狱逃脱 Demo v2</h1>
+  <div id="game">
+    <div>
+      <label>切换房间：</label>
+      <select id="roomSelect" onchange="goRoom(this.value)"></select>
+    </div>
+    <div class="scene" id="scene"></div>
+    <div id="info">选择一个热点进行互动。</div>
+  </div>
+
+<script>
+let rooms=[]; let current=null;
+
+async function loadRooms(){
+  const res=await fetch("rooms.json");
+  rooms=await res.json();
+  const sel=document.getElementById("roomSelect");
+  rooms.forEach(r=>{
+    let opt=document.createElement("option");
+    opt.value=r.id; opt.textContent="房间 "+r.id; sel.appendChild(opt);
+  });
+  goRoom(1);
+}
+
+function goRoom(id){
+  current=rooms.find(r=>r.id==id);
+  document.getElementById("roomSelect").value=id;
+  const scene=document.getElementById("scene");
+  scene.innerHTML='<img src="'+current.bg+'" alt="bg"/>';
+  current.hotspots.forEach(h=>{
+    let div=document.createElement("div");
+    div.className="hotspot";
+    div.style.left=h.x+'%'; div.style.top=h.y+'%';
+    div.style.width=h.w+'%'; div.style.height=h.h+'%';
+    div.title=h.label;
+    div.onclick=()=>onHotspot(h);
+    scene.appendChild(div);
+  });
+  document.getElementById("info").innerHTML="进入 "+current.rule;
+}
+
+function onHotspot(h){
+  if(h.action==="showExamples"){
+    document.getElementById("info").innerHTML='<b>墙上例题：</b><ul>'+current.examples.map(e=>'<li>'+e+'</li>').join('')+'</ul>';
+  }
+  if(h.action==="door"){
+    let ans=prompt(current.doorQuestion);
+    if(ans){
+      ans=ans.trim();
+      if(ans===current.doorAnswer){
+        document.getElementById("info").innerHTML='✅ 正确！通关密码是：<b>'+current.rewardCode+'</b>';
+      }else{
+        document.getElementById("info").innerHTML='❌ 错误，请重试。';
+      }
+    }
+  }
+}
+
+loadRooms();
+</script>
+</body>
+</html>
